@@ -1,29 +1,45 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Cinema {
+
     public static void main(String[] args) {
 
-        System.out.println("Hello! Welcome in cinema seats manager. \n" +
-                "Choose what You want to do: \n" +
-                "1. Create new cinema hall \n" +
-                "2. Reserve seats \n" +
-                "3. ");
+        CinemaHall cinemaHall;
 
         try (Scanner scanner = new Scanner(System.in)) {
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    System.out.println("Please type how many rows and how many in one row you need:");
-                    int rows = scanner.nextInt();
-                    int seats = scanner.nextInt();
-                    CinemaHallCreator.createNewCinemaHall(rows, seats);
-                    break;
-                case 2:
-                    System.out.println("Wait...");
-                    break;
-                default:
-                    System.out.println("Are you sure, that you choose right?");
+            // --------------------------------------------
+            System.out.println("Please type how many rows and how many in one row you need:");
+            int rows = scanner.nextInt();
+            int seats = scanner.nextInt();
+            cinemaHall = new CinemaHall(rows, seats);
+            System.out.println(cinemaHall);
+            cinemaHall.createNewCinemaHall();
+            // --------------------------------------------
+
+
+            System.out.println("Type how much seats you want to reserve. Next type symbol of seat");
+            int seatsToReserve = scanner.nextInt();
+            List<String> reservedSeats = new ArrayList<>(seatsToReserve);
+            while (seatsToReserve != reservedSeats.size()) {
+                try {
+                    String nextSeat = scanner.next().toUpperCase();
+                    cinemaHall.reserveSeat(nextSeat);
+                    reservedSeats.add(nextSeat);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("You choose seat out of range");
+                }
             }
+            System.out.println("You successfully reserved seats: " + reservedSeats);
+
+
+//        --------------------------------------------
+            System.out.println("Type your base ticket price: ");
+            double ticketPrice = scanner.nextDouble();
+            System.out.println(cinemaHall.calculateIncome(ticketPrice) + "$");
+
         }
     }
+
 }
